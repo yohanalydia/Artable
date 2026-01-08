@@ -3,6 +3,7 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -205,7 +206,36 @@ public class senimanServlet extends HttpServlet {
 
                 // Forward ke halaman yang berisi detail tadi
                 request.getRequestDispatcher("views/detailSeniman.jsp").forward(request, response);
+            } else if ("detailSekolah".equals(menu)) {
+                String id = request.getParameter("id"); // ID Sekolah
+                if (id == null || id.isEmpty()) {
+                    response.sendRedirect("Home?error=invalid_id");
+                    return;
+                }
+
+                // 2. Ambil Profil Sekolah dari tabel User
+                // Kita cari user yang punya idUser tersebut
+                User sekolah = new User().find("idUser", id);
+
+                if (sekolah == null) {
+                    response.sendRedirect("Home?error=school_not_found");
+                    return;
+                }
+
+                // 3. Ambil Daftar Seniman yang bernaung di bawah sekolah tersebut
+                // Filter berdasarkan idUser (foreign key di tabel seniman)
+                Seniman sModel = new Seniman();
+                sModel.where("idUser = '" + id + "'");
+                ArrayList<Seniman> listSeniman = sModel.get();
+
+                // 4. Masukkan data ke dalam Request Attribute agar bisa dibaca JSP
+                request.setAttribute("sekolah", sekolah);
+                request.setAttribute("listSeniman", listSeniman);
+
+                // 5. Lempar (Forward) ke halaman detailSekolah.jsp
+                request.getRequestDispatcher("views/detailSekolah.jsp").forward(request, response);
             }
+
         } catch (Exception e) {
             // Cetak error ke console untuk debugging
             System.err.println("Error di doGet Seniman: " + e.getMessage());

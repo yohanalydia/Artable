@@ -1,3 +1,4 @@
+<%@page import="model.Sekolah"%>
 <%@page import="model.Notifikasi"%>
 <%@page import="model.Seniman"%>
 <%@page import="model.User"%>
@@ -8,7 +9,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Product Detail - Artable</title>
+        <title>Detail Produk - Artable</title>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -220,9 +221,15 @@
                     </div>
 
                     <div class="col-md-6">
-                        <% Seniman pembuat = new Seniman().find("idSeniman", String.valueOf(p.getIdSeniman()));%>
+                        <% Seniman pembuat = new Seniman().find("idSeniman", String.valueOf(p.getIdSeniman()));
+                           String idSekolah = String.valueOf(pembuat.getIdUser());
+                           User sekolah = new User().find("idUser", idSekolah);
+                        %>
                         <a href="SenimanServlet?menu=view&id=<%= pembuat.getIdSeniman()%>" class="badge rounded-pill px-3 py-2" style="background-color: #d2c9ff; color: #6f42c1;">
                             <i class="bi bi-person-circle me-1"></i> <%= pembuat.getNama()%>
+                        </a>
+                        <a href="SenimanServlet?menu=detailSekolah&id=<%= idSekolah %>" class="badge rounded-pill px-3 py-2" style="background-color: #d2c9ff; color: #6f42c1;">
+                            <i class="bi bi bi-house-heart me-1"></i> <%= sekolah.getNama() %>
                         </a>
                         <br><br>
                         <h2 class="fw-bold mb-1">"<%= p.getNama()%>"</h2>

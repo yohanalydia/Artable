@@ -1,57 +1,100 @@
-<%@page import="model.User"%>
 <%@page import="model.Notifikasi"%>
+<%@page import="model.Seniman, model.User, java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="id">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Daftar - Artable</title>
+        <title>Detail Sekolah - Artable</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-        <!-- GOOGLE FONTS -->
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
         <style>
             body {
-                background-color: #f6f7fb;
+                background: #f6f7fb;
                 font-family: 'Plus Jakarta Sans', sans-serif;
             }
             .topbar {
-                font-size:14px;
-                background:#eef1f8;
+                font-size: 14px;
+                background: #eef1f8;
             }
-            .register-card {
-                max-width: 550px;
-                margin: 50px auto;
-                border: none;
-                border-radius: 20px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            .text-purple {
+                color: #6f42c1;
+            }
+            .bg-purple {
+                background-color: #6f42c1;
+                color: white;
             }
             .btn-purple {
                 background: #6f42c1;
                 color: white;
                 border-radius: 12px;
-                font-weight: 600;
                 transition: 0.3s;
-                padding: 12px;
+                border: none;
             }
             .btn-purple:hover {
                 background: #5a369d;
                 color: white;
                 transform: translateY(-2px);
             }
-            .form-label {
-                font-weight: 600;
-                font-size: 0.9rem;
-                color: #555;
+
+            /* Profile Header */
+            .school-profile-card {
+                background: white;
+                border-radius: 24px;
+                padding: 40px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+                margin-top: -50px;
+                position: relative;
+                z-index: 10;
             }
-            .hover-purple:hover {
-                color: #6f42c1 !important;
-                transition: 0.3s;
+            .profile-banner {
+                height: 200px;
+                background: #d2c9ff;
+                border-radius: 0 0 40px 40px;
+            }
+            .school-logo {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border: 5px solid white;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            /* Artist Card */
+            .artist-card {
+                border: none;
+                border-radius: 20px;
+                transition: 0.4s;
+                background: white;
+            }
+            .artist-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(111, 66, 193, 0.12);
+            }
+            .artist-img {
+                height: 250px;
+                object-fit: cover;
+                border-radius: 20px 20px 0 0;
+            }
+            .stats-box {
+                background: #f8f6ff;
+                border-radius: 15px;
+                padding: 15px;
             }
         </style>
     </head>
     <body>
+
+        <%
+            // Mengambil data dari Servlet
+            User sekolah = (User) request.getAttribute("sekolah");
+            ArrayList<Seniman> listSeniman = (ArrayList<Seniman>) request.getAttribute("listSeniman");
+            User userSession = (User) session.getAttribute("user");
+        %>
+
         <!-- BAGIAN NAVIGASI -->
         <div class="sticky-top shadow-sm">
             <!-- Topbar -->
@@ -79,7 +122,6 @@
 
                     <div class="d-flex gap-4 align-items-center">
                         <%
-                            User userSession = (User) session.getAttribute("user");
                             int countNotif = 0;
                             if (userSession != null) {
                                 countNotif = new Notifikasi().getCountUnread(userSession.getIdUser());
@@ -115,7 +157,7 @@
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -158,7 +200,7 @@
                             if (userSession == null) {
                         %>
                         <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-danger fw-bold">Register</a>
+                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
                         } else {
                         %>
@@ -172,87 +214,81 @@
             </div>
         </div>
 
+        <div class="profile-banner"></div>
+
         <div class="container">
-            <div class="card register-card p-4 p-md-5">
-                <div class="text-center mb-5">
-                    <h3 class="fw-bold text-dark mb-2">Register Here</h3>
-                    <p class="text-muted small">Silahkan lengkapi data diri Anda untuk bergabung</p>
-                </div>
-
-                <% if (request.getAttribute("error") != null) {%>
-                <div class="alert alert-danger py-2 border-0 small" role="alert">
-                    <i class="bi bi-exclamation-circle-fill me-2"></i> <%= request.getAttribute("error")%>
-                </div>
-                <% }%>
-
-                <form action="${pageContext.request.contextPath}/Auth" method="POST">
-                    <input type="hidden" name="action" value="register">
-
-                    <div class="mb-3">
-                        <label class="form-label">Daftar Sebagai</label>
-                        <select class="form-select bg-light" name="role" required>
-                            <option value="" disabled selected>Pilih tipe akun...</option>
-                            <option value="PEMBELI">Pembeli (Kolektor/Umum)</option>
-                            <option value="SEKOLAH">Sekolah / Institusi Seni</option>
-                        </select>
+            <% if (sekolah != null) {%>
+            <div class="school-profile-card">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center text-md-start">
+                        <img src="<%= (sekolah.getImageUrl() != null && !sekolah.getImageUrl().isEmpty()) ? sekolah.getImageUrl() : "https://via.placeholder.com/150"%>" 
+                             class="rounded-circle school-logo mb-3 mb-md-0" alt="Logo Sekolah">
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nama Lengkap</label>
-                            <input type="text" name="nama" class="form-control bg-light" placeholder="Contoh: Budi Santoso" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control bg-light" placeholder="budisantoso99" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Alamat Email</label>
-                        <input type="email" name="email" class="form-control bg-light" placeholder="nama@email.com" required>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control bg-light" placeholder="Minimal 6 karakter" required minlength="6">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nomor Telepon</label>
-                            <input type="text" name="nomorTelepon" class="form-control bg-light" placeholder="08123xxx" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label">Alamat Lengkap</label>
-                        <textarea name="alamat" class="form-control bg-light" rows="3" placeholder="Jl. Seni No. 123, Jakarta" required></textarea>
-                    </div>
-
-                    <div id="rekeningSection" style="display: none;">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label text-purple">Tipe Rekening / Nama Bank</label>
-                                <input type="text" id="tipeRekening" name="tipeRekening" class="form-control bg-light border-primary" placeholder="Contoh: BCA / Mandiri / Dana">
+                    <div class="col-md-6 text-center text-md-start">
+                        <h2 class="fw-bold text-dark mb-1"><%= sekolah.getNama()%></h2>
+                        <p class="text-muted"><i class="bi bi-geo-alt-fill text-purple me-1"></i> <%= sekolah.getAlamat()%></p>
+                        <div class="d-flex gap-3 justify-content-center justify-content-md-start mt-3">
+                            <div class="stats-box text-center">
+                                <span class="d-block small text-muted">Telepon</span>
+                                <span class="fw-bold text-purple"><%= sekolah.getNomorTelepon()%></span>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label text-purple">Nomor Rekening</label>
-                                <input type="text" id="nomorRekening" name="nomorRekening" class="form-control bg-light border-primary" placeholder="1234567890">
+                            <div class="stats-box text-center">
+                                <span class="d-block small text-muted">Total Seniman</span>
+                                <span class="fw-bold text-purple"><%= (listSeniman != null) ? listSeniman.size() : 0%></span>
                             </div>
                         </div>
-                        <div class="alert alert-info py-2 small border-0">
-                            <i class="bi bi-info-circle-fill me-2"></i> Rekening ini akan digunakan pembeli untuk mentransfer pembayaran karya.
-                        </div>
                     </div>
-
-                    <button type="submit" class="btn btn-purple w-100 py-2 shadow-sm">Daftar Sekarang</button>
-
-                    <div class="text-center mt-4 small text-muted">
-                        Sudah punya akun? <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none fw-bold">Masuk di sini</a>
+                    <div class="col-md-3 text-center text-md-end mt-4 mt-md-0">
+                        <a href="https://wa.me/<%= sekolah.getNomorTelepon()%>" class="btn btn-purple px-4 py-2">
+                            <i class="bi bi-chat-dots me-2"></i>Hubungi Sekolah
+                        </a>
                     </div>
-                </form>
+                </div>
             </div>
+
+            <div class="py-5">
+                <div class="d-flex align-items-center mb-4">
+                    <h3 class="fw-bold text-purple mb-0">Seniman Kami</h3>
+                    <div class="ms-3 flex-grow-1 border-top" style="opacity: 0.1;"></div>
+                </div>
+
+                <div class="row g-4">
+                    <%
+                        if (listSeniman != null && !listSeniman.isEmpty()) {
+                            for (Seniman s : listSeniman) {
+                    %>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="card artist-card h-100 shadow-sm">
+                            <img src="<%= (s.getImageUrl() != null) ? s.getImageUrl() : "https://via.placeholder.com/300x400"%>" 
+                                 class="card-img-top artist-img" alt="<%= s.getNama()%>">
+                            <div class="card-body text-center">
+                                <h6 class="fw-bold mb-1"><%= s.getNama()%></h6>
+                                <a href="SenimanServlet?menu=view&id=<%= s.getIdSeniman()%>" class="btn btn-sm btn-view-custom rounded-pill px-3" style="background-color: #d2c9ff; color: #6f42c1;">
+                                    <i class="bi bi-eye me-1"></i> View Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <%
+                        }
+                    } else {
+                    %>
+                    <div class="col-12 text-center py-5">
+                        <div class="text-muted">
+                            <i class="bi bi-people mb-3" style="font-size: 3rem;"></i>
+                            <p>Belum ada seniman yang terdaftar di sekolah ini.</p>
+                        </div>
+                    </div>
+                    <%
+                        }
+                    %>
+                </div>
+            </div>
+            <% } else { %>
+            <div class="alert alert-danger mt-5 text-center">Data sekolah tidak ditemukan!</div>
+            <% }%>
         </div>
+
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">
@@ -286,26 +322,7 @@
                 <p class="text-center text-secondary small">&copy; 2025 Artable. All rights reserved.</p>
             </div>
         </footer>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            document.querySelector('select[name="role"]').addEventListener('change', function () {
-                const rekeningSection = document.getElementById('rekeningSection');
-                const tipeInput = document.getElementById('tipeRekening');
-                const nomorInput = document.getElementById('nomorRekening');
 
-                if (this.value === 'SEKOLAH') {
-                    rekeningSection.style.display = 'block';
-                    tipeInput.setAttribute('required', 'required');
-                    nomorInput.setAttribute('required', 'required');
-                } else {
-                    rekeningSection.style.display = 'none';
-                    tipeInput.removeAttribute('required');
-                    nomorInput.removeAttribute('required');
-                    // Kosongkan value jika pindah ke pembeli agar tidak sengaja terkirim
-                    tipeInput.value = '';
-                    nomorInput.value = '';
-                }
-            });
-        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

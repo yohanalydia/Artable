@@ -252,7 +252,7 @@
         <div class="container mb-5">
             <div class="row align-items-center mb-5">
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1471&auto=format&fit=crop" alt="Art Inclusivity" class="img-fluid rounded-4 shadow">
+                    <img src="https://images.unsplash.com/photo-1560421683-6856ea585c78?q=80&w=1174&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Art Inclusivity" class="img-fluid rounded-4 shadow">
                 </div>
                 <div class="col-lg-6 ps-lg-5">
                     <h2 class="section-title">Apa itu Artable?</h2>
