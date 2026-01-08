@@ -12,11 +12,13 @@ public class Transaksi extends Model<Transaksi> {
     private String metodePembayaran;
     private String alamatPengiriman;
 
+    // Constructor default, set nama tabel dan primary key
     public Transaksi() {
         this.table = "transaksi";
         this.primaryKey = "idTransaksi";
     }
 
+    // Constructor untuk insert baru (tanpa idTransaksi)
     public Transaksi(int idPembeli, LocalDateTime tanggalTransaksi, double totalBayar, String metodePembayaran, String alamatPengiriman) {
         this();
         this.idPembeli = idPembeli;
@@ -26,6 +28,7 @@ public class Transaksi extends Model<Transaksi> {
         this.alamatPengiriman = alamatPengiriman;
     }
 
+    // Constructor lengkap dengan idTransaksi (untuk read/update)
     public Transaksi(int idTransaksi, int idPembeli, LocalDateTime tanggalTransaksi, double totalBayar, String metodePembayaran, String alamatPengiriman) {
         this.idTransaksi = idTransaksi;
         this.idPembeli = idPembeli;
@@ -35,6 +38,7 @@ public class Transaksi extends Model<Transaksi> {
         this.alamatPengiriman = alamatPengiriman;
     }
 
+    // Convert ResultSet jadi object Transaksi
     @Override
     public Transaksi toModel(ResultSet rs) {
         try {
@@ -60,6 +64,7 @@ public class Transaksi extends Model<Transaksi> {
         return null;
     }
 
+    // SETTER DAN GETTER
     public int getIdTransaksi() {
         return idTransaksi;
     }

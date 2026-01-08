@@ -120,6 +120,7 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
                         <%
                             int countNotif = 0;
@@ -153,6 +154,7 @@
                         <a href="Home" class="text-decoration-none text-dark">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
@@ -197,15 +199,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -215,7 +219,8 @@
         </div>
 
         <div class="profile-banner"></div>
-
+        
+        <!-- DETAIL SEKOLAH -->
         <div class="container">
             <% if (sekolah != null) {%>
             <div class="school-profile-card">
@@ -246,6 +251,7 @@
                 </div>
             </div>
 
+            <!-- Menampilkan daftar seniman pada sekolah tersebut -->
             <div class="py-5">
                 <div class="d-flex align-items-center mb-4">
                     <h3 class="fw-bold text-purple mb-0">Seniman Kami</h3>
@@ -288,7 +294,8 @@
             <div class="alert alert-danger mt-5 text-center">Data sekolah tidak ditemukan!</div>
             <% }%>
         </div>
-
+        
+        <!-- FOOTER -->
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">

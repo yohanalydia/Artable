@@ -32,6 +32,7 @@ public class MainServlet extends HttpServlet {
                 request.getRequestDispatcher("views/home.jsp").forward(request, response);
 
             } else if ("about".equals(menu)) {
+                // Redirect ke halaman about us jika menunya adalah about
                 request.getRequestDispatcher("views/aboutUs.jsp").forward(request, response);
 
             } else if ("faq".equals(menu)) {

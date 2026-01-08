@@ -14,12 +14,14 @@ public class DetailTransaksi extends Model<DetailTransaksi> implements Updateabl
     private String status;
     private String noResi;
     private String kurir;
-
+    
+    // Constructor default, set nama tabel dan primary key
     public DetailTransaksi() {
         this.table = "detail_transaksi";
         this.primaryKey = "idDetail";
     }
 
+    // Constructor tanpa idDetail (untuk insert baru)
     public DetailTransaksi(int idTransaksi, int idProduk, int idSekolah, int qty, double hargaSatuan, String buktiTransfer, String status, String noResi, String kurir) {
         this();
         this.idTransaksi = idTransaksi;
@@ -32,7 +34,8 @@ public class DetailTransaksi extends Model<DetailTransaksi> implements Updateabl
         this.noResi = noResi;
         this.kurir = kurir;
     }
-
+    
+    // Constructor lengkap dengan idDetail (untuk read/update)
     public DetailTransaksi(int idDetail, int idTransaksi, int idProduk, int idSekolah, int qty, double hargaSatuan, String buktiTransfer, String status, String noResi, String kurir) {
         this();
         this.idDetail = idDetail;
@@ -46,7 +49,8 @@ public class DetailTransaksi extends Model<DetailTransaksi> implements Updateabl
         this.noResi = noResi;
         this.kurir = kurir;
     }
-
+    
+    // Convert ResultSet jadi object DetailTransaksi
     @Override
     public DetailTransaksi toModel(ResultSet rs) {
         try {
@@ -65,11 +69,12 @@ public class DetailTransaksi extends Model<DetailTransaksi> implements Updateabl
 
             return dt;
         } catch (Exception e) {
-            e.printStackTrace();
+            setMessage(e.getMessage());
             return null;
         }
     }
 
+    // SETTER DAN GETTER
     public int getIdDetail() {
         return idDetail;
     }

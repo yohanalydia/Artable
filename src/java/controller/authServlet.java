@@ -76,16 +76,26 @@ public class authServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Ambil parameter aksi dari request
         String action = request.getParameter("action");
+
+        // Proses registrasi user
         if ("register".equals(action)) {
             handleRegister(request, response);
+
+        // Update data profil user
         } else if ("updateProfil".equals(action)) {
             handleUpdate(request, response);
+
+        // Ganti password user
         } else if ("changePass".equals(action)) {
             handleUpdatePass(request, response);
+
+        // Proses login (default)
         } else {
             handleLogin(request, response);
         }
+
     }
 
     private void handleUpdatePass(HttpServletRequest request, HttpServletResponse response)
@@ -270,7 +280,7 @@ public class authServlet extends HttpServlet {
                 Pembeli pembeli = new Pembeli(
                         userBase.getIdUser(), userBase.getNama(), userBase.getUsername(),
                         userBase.getEmail(), userBase.getPassword(), userBase.getAlamat(),
-                        userBase.getNomorTelepon(), userBase.getRole(), userBase.getImageUrl()
+                        userBase.getNomorTelepon(), userBase.getImageUrl()
                 );
                 session.setAttribute("user", pembeli);
             } else if ("SEKOLAH".equals(userBase.getRole())) {
@@ -285,7 +295,6 @@ public class authServlet extends HttpServlet {
                         userBase.getPassword(),
                         userBase.getAlamat(),
                         userBase.getNomorTelepon(),
-                        userBase.getRole(),
                         userBase.getImageUrl(),
                         tipe, // Ambil dari userBase hasil toModel
                         nomor // Ambil dari userBase hasil toModel

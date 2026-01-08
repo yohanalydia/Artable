@@ -17,7 +17,7 @@ public class Produk extends Model<Produk> {
     private String dimensi;
     private String material;
     
-    
+    // Convert ResultSet jadi object Produk
     @Override
     Produk toModel(ResultSet rs){
         try {
@@ -33,11 +33,13 @@ public class Produk extends Model<Produk> {
         return null;
     }
     
+    // Constructor default, set nama tabel dan primary key
     public Produk(){
         this.table = "produk";
         this.primaryKey = "idProduk";
     };
     
+    // Constructor untuk insert baru (tanpa idProduk)
     public Produk(String nama, String kategori, double harga, String deskripsi, int stok, int idSeniman, String imageUrl, double berat, String dimensi, String material) {
         this.table = "produk";
         this.primaryKey = "idProduk";
@@ -54,6 +56,7 @@ public class Produk extends Model<Produk> {
         this.material = material;
     }
     
+    // Constructor lengkap dengan idProduk (untuk read/update)
     public Produk(int id, String nama, String kategori, double harga, String deskripsi, int stok, int idSeniman, String imageUrl, LocalDateTime uploadTime, double berat, String dimensi, String material) {
         this.table = "produk";
         this.primaryKey = "idProduk";
@@ -71,6 +74,7 @@ public class Produk extends Model<Produk> {
         this.material = material;
     }
 
+    // SETTER DAN GETTER
     public int getIdProduk() {
         return idProduk;
     }

@@ -62,17 +62,6 @@
     </head>
     <body>
 
-        <%
-            // Mengambil data dari Servlet
-            String totalPendapatan = (request.getAttribute("totalPendapatan") != null) ? request.getAttribute("totalPendapatan").toString() : "0";
-            String totalKarya = (request.getAttribute("totalKarya") != null) ? request.getAttribute("totalKarya").toString() : "0";
-            String totalSiswa = (request.getAttribute("totalSiswa") != null) ? request.getAttribute("totalSiswa").toString() : "0";
-            String totalPesanan = (request.getAttribute("totalPesanan") != null) ? request.getAttribute("totalPesanan").toString() : "0";
-            String totalTerjual = (request.getAttribute("totalTerjual") != null) ? request.getAttribute("totalTerjual").toString() : "0";
-
-            // Data Kategori untuk Pie Chart (Urutan: Fine Art, Digital Art, Handmade Art)
-            String categoryData = (request.getAttribute("categoryData") != null) ? request.getAttribute("categoryData").toString() : "0, 0, 0";
-        %>
         <!-- BAGIAN NAVIGASI -->
         <div class="sticky-top shadow-sm">
             <!-- Topbar -->
@@ -98,6 +87,7 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
                         <%
                             User userSession = (User) session.getAttribute("user");
@@ -132,6 +122,7 @@
                         <a href="Home" class="text-decoration-none text-dark">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-danger fw-bold">Dashboard</a>
@@ -176,15 +167,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -196,6 +189,7 @@
         <div class="container py-5">
             <div class="mb-4">
                 <h2 class="fw-bold text-dark">
+                    <!-- Menampilkan nama halaman sesuai dengan role user -->
                     <%
                         if ("SEKOLAH".equals(userSession.getRole())) {
                             out.print("Laporan Sekolah");
@@ -207,6 +201,18 @@
                 <p class="text-muted">Pantau ringkasan performa dan distribusi karya siswa.</p>
             </div>
 
+            <%
+                // Mengambil data dari Servlet
+                String totalPendapatan = (request.getAttribute("totalPendapatan") != null) ? request.getAttribute("totalPendapatan").toString() : "0";
+                String totalKarya = (request.getAttribute("totalKarya") != null) ? request.getAttribute("totalKarya").toString() : "0";
+                String totalSiswa = (request.getAttribute("totalSiswa") != null) ? request.getAttribute("totalSiswa").toString() : "0";
+                String totalPesanan = (request.getAttribute("totalPesanan") != null) ? request.getAttribute("totalPesanan").toString() : "0";
+                String totalTerjual = (request.getAttribute("totalTerjual") != null) ? request.getAttribute("totalTerjual").toString() : "0";
+
+                // Data Kategori untuk Pie Chart (Urutan: Fine Art, Digital Art, Handmade Art)
+                String categoryData = (request.getAttribute("categoryData") != null) ? request.getAttribute("categoryData").toString() : "0, 0, 0";
+            %>
+            <!-- Menampilkan data yang telah didapatkan dari Servlet -->
             <div class="row g-4 mb-5">
                 <div class="col-md-4">
                     <div class="card dashboard-card card-purple-gradient h-100 p-3 text-center">
@@ -307,17 +313,22 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            // Ambil konteks canvas untuk chart
             const ctx = document.getElementById('categoryPieChart').getContext('2d');
+
+            // Buat chart tipe pie menggunakan Chart.js
             new Chart(ctx, {
                 type: 'pie',
                 data: {
+                    // Label kategori yang ditampilkan di chart
                     labels: ['Fine Art', 'Digital Art', 'Handmade Art'],
                     datasets: [{
+                            // Data kategori dari server (JSP)
                             data: [<%= categoryData%>],
-                            backgroundColor: ['#4b2a89', '#6f42c1', '#d1b3ff'],
-                            hoverOffset: 25,
-                            borderWidth: 4,
-                            borderColor: '#ffffff'
+                            backgroundColor: ['#4b2a89', '#6f42c1', '#d1b3ff'], // Warna masing-masing slice
+                            hoverOffset: 25, // Jarak saat hover
+                            borderWidth: 4, // Lebar garis tepi
+                            borderColor: '#ffffff' // Warna garis tepi
                         }]
                 },
                 options: {
@@ -325,16 +336,17 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom',
+                            position: 'bottom', // Letak legend di bawah chart
                             labels: {
-                                padding: 20,
+                                padding: 20, // Jarak label
                                 usePointStyle: true,
-                                font: {size: 14, weight: '600'}
+                                font: {size: 14, weight: '600'} // Style font legend
                             }
                         }
                     }
                 }
             });
         </script>
+
     </body>
 </html>

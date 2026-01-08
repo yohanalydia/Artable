@@ -35,7 +35,8 @@ public abstract class Model<E> {
             message = e.getMessage();
         }
     }
-
+    
+    // Digunakan untuk disconnect dari database
     private void disconnect() {
         try {
             stmt.close();
@@ -44,7 +45,8 @@ public abstract class Model<E> {
             message = e.getMessage();
         }
     }
-
+    
+    // Menambahkan baris data baru ke database
     public void insert() {
         try {
             connect();
@@ -84,7 +86,8 @@ public abstract class Model<E> {
             disconnect();
         }
     }
-
+    
+    // Mengubah baris data yang sudah ada di database
     public void update() {
         try {
             connect();
@@ -122,7 +125,8 @@ public abstract class Model<E> {
             disconnect();
         }
     }
-
+    
+    // Menghapus baris data pada database dengan kondisi yang telah ditentukan
     public void delete() {
         try {
             connect();
@@ -142,7 +146,8 @@ public abstract class Model<E> {
             disconnect();
         }
     }
-
+    
+    // Konversi satu baris ResultSet menjadi ArrayList<Object>
     ArrayList<Object> toRow(ResultSet rs) {
         ArrayList<Object> res = new ArrayList<>();
         int i = 1;
@@ -152,11 +157,12 @@ public abstract class Model<E> {
                 i++;
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return res;
     }
-
+    
+    // Menjalankan query SQL dan kembalikan hasil sebagai ArrayList<ArrayList<Object>>
     public ArrayList<ArrayList<Object>> query(String query) {
         ArrayList<ArrayList<Object>> res = new ArrayList<>();
         try {
@@ -173,6 +179,7 @@ public abstract class Model<E> {
         return res;
     }
 
+    // Ambil semua record dari tabel sesuai kondisi, dikonversi ke model E
     public ArrayList<E> get() {
         ArrayList<E> res = new ArrayList<>();
         try {
@@ -202,7 +209,8 @@ public abstract class Model<E> {
         }
         return res;
     }
-
+    
+    // Cari record berdasarkan kolom dan nilainya
     public E find(String searchKey, String keyValue) {
         try {
             connect();
@@ -219,38 +227,46 @@ public abstract class Model<E> {
         }
         return null;
     }
-
+    
+    // Abstract method untuk konversi ResultSet ke model E
     abstract E toModel(ResultSet rs);
 
+    // Set kolom yang ingin dipilih
     public void select(String cols) {
         select = cols;
     }
 
+    // Tambahkan join ke tabel lain
     public void join(String table, String on) {
         join += " JOIN " + table + " ON " + on;
     }
-
+    
+    // Set kondisi where
     public void where(String cond) {
         where = cond;
     }
 
+    // Tambahkan query tambahan (misal ORDER BY, GROUP BY)
     public void addQuery(String query) {
         otherQuery = query;
     }
-
+    
+    // Cek koneksi database
     public boolean isConnected() {
         return isConnected;
     }
-
+    
+    // Ambil pesan error terakhir
     public String getMessage() {
         return message;
     }
-
+    
+    // Set pesan error manual
     public void setMessage(String message) {
         this.message = message;
     }
     
-    // Agar bisa menjalankan query tanpa mengembalikan data
+    // Jalankan query tanpa mengembalikan data (INSERT/UPDATE/DELETE)
     public void executeCustom(String query) {
         try {
             connect();

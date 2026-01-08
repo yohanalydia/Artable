@@ -46,7 +46,7 @@ public class TransaksiServlet extends HttpServlet {
             }
         } catch (Exception e) {
             // Log error ke console
-            System.err.println("Error di TransaksiServlet (doGet): " + e.getMessage());
+            System.err.println("Error di TransaksiServlet (doGet): ");
             e.printStackTrace();
 
             // Redirect ke Home dengan info error
@@ -57,18 +57,30 @@ public class TransaksiServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+         // Ambil parameter aksi dari request
         String action = request.getParameter("action");
 
+        // Proses checkout pesanan
         if (action != null && "checkout".equals(action)) {
             prosesCheckout(request, response);
+
+            // Batalkan pesanan
         } else if ("cancel_order".equals(action)) {
             prosesCancel(request, response);
+
+            // Upload bukti pembayaran
         } else if ("upload_bukti".equals(action)) {
             handleUploadBukti(request, response);
+
+            // Verifikasi pembayaran
         } else if ("verifikasi_pembayaran".equals(action)) {
             handleVerifikasiPembayaran(request, response);
+
+            // Proses pengiriman pesanan
         } else if ("proses_kirim".equals(action)) {
             handleProsesKirim(request, response);
+
+            // Selesaikan pesanan
         } else if ("selesaikan_pesanan".equals(action)) {
             prosesSelesai(request, response);
         }

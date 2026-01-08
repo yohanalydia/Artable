@@ -71,6 +71,7 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
                         <%
                             User userSession = (User) session.getAttribute("user");
@@ -105,6 +106,7 @@
                         <a href="Home" class="text-decoration-none text-dark">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
@@ -149,15 +151,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -174,6 +178,7 @@
                             <div class="card-body p-0">
                                 <div class="row g-0"> 
                                     <%
+                                        // Mengambil atribut cart yang dikirimkan oleh servlet untuk menampilkan produk yang ada di cart user
                                         ArrayList<CartItem> items = (ArrayList<CartItem>) request.getAttribute("cart");
                                         double subtotal = (items != null) ? (double) request.getAttribute("subtotal") : 0;
                                     %>
@@ -215,6 +220,7 @@
                                                 <h6 class="text-black mb-0"><%= p.getNama()%></h6>
                                             </div>
                                             <div class="col-md-3 d-flex justify-content-center align-items-center">
+                                                <!-- Mengarahkan ke servlet jika user menekan tombol (-) -->
                                                 <form action="CartServlet" method="POST" style="display: inline;">
                                                     <input type="hidden" name="action" value="update">
                                                     <input type="hidden" name="idItem" value="<%= ci.getIdCartItem()%>">
@@ -227,6 +233,7 @@
                                                 <input type="number" readonly class="form-control form-control-sm text-center mx-2" 
                                                        value="<%= ci.getQuantity()%>" style="width: 50px;" />
 
+                                                <!-- Mengarahkan ke servlet jika user menekan tombol (+) -->
                                                 <form action="CartServlet" method="POST" style="display: inline;">
                                                     <input type="hidden" name="action" value="update">
                                                     <input type="hidden" name="idItem" value="<%= ci.getIdCartItem()%>">
@@ -284,6 +291,7 @@
                                             </select>
                                         </div>
 
+                                        <!-- Menghitung berapa banyak sekolah unik yang berbeda untuk menghitung ongkos kirim -->
                                         <%
                                             ArrayList<Integer> uniqueSchools = new ArrayList<>(); // List untuk simpan ID Sekolah unik
 

@@ -113,8 +113,9 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
-                        <%
+                        <%                            
                             int countNotif = 0;
                             if (userSession != null) {
                                 countNotif = new Notifikasi().getCountUnread(userSession.getIdUser());
@@ -146,11 +147,12 @@
                         <a href="Home" class="text-decoration-none text-dark">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -190,15 +192,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -218,7 +222,7 @@
 
         <div class="container mb-5">
             <div class="row g-4">
-
+                <!-- FORM UNTUK MENAMBAH SENIMAN BARU DI SEKOLAH -->
                 <div class="col-lg-4">
                     <div class="card card-custom p-4 sticky-top" style="top: 20px; z-index: 1000;">
                         <h4 class="section-title">Tambah Seniman Baru</h4>
@@ -260,6 +264,7 @@
                 <div class="col-lg-8">
                     <h4 class="section-title text-center text-lg-start">Daftar Seniman Kami</h4>
 
+                    <!-- Menampilkan daftar seniman yang ada di sekolah -->
                     <div class="row g-3">
                         <%
                             ArrayList<Seniman> listSeniman = (ArrayList<Seniman>) request.getAttribute("myArtistList");
@@ -269,7 +274,7 @@
                             <i class="bi bi-people display-1 text-muted"></i>
                             <p class="text-muted mt-3">Belum ada seniman yang terdaftar.</p>
                         </div>
-                        <%
+                        <%    
                         } else {
                             for (Seniman s : listSeniman) {
                         %>
@@ -283,12 +288,15 @@
                                         <%= s.getTentangSaya()%>
                                     </p>
                                     <div class="d-grid gap-2">
+                                        <!-- Memberikan tombol untuk melihat detail seniman -->
                                         <a href="SenimanServlet?menu=view&id=<%= s.getIdSeniman()%>" class="btn btn-sm btn-outline-secondary rounded-pill">
                                             <i class='bi bi-eye'></i> View
                                         </a>
+                                        <!-- Memberikan tombol untuk mengedit detail seniman -->
                                         <a href="SenimanServlet?menu=edit&id=<%= s.getIdSeniman()%>" class="btn btn-sm btn-outline-secondary rounded-pill">
                                             <i class="bi bi-pencil-square"></i> Edit
                                         </a>
+                                        <!-- Memberikan tombol untuk menghapus seniman -->
                                         <form action="SenimanServlet" method="POST" class="d-grid" 
                                               onsubmit="return confirm('Peringatan: Menghapus seniman ini akan menghapus SELURUH karya/produk yang terkait secara otomatis. Apakah Anda yakin?')">
 
@@ -312,7 +320,8 @@
 
             </div>
         </div>
-
+                    
+        <!-- FOOTER -->
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">

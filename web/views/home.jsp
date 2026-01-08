@@ -142,6 +142,7 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
                         <%
                             User userSession = (User) session.getAttribute("user");
@@ -176,11 +177,12 @@
                         <a href="Home" class="text-decoration-none text-danger fw-bold">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -220,15 +222,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -254,6 +258,7 @@
             <a class="uk-position-center-left uk-position-small uk-hidden-hover" href uk-slidenav-previous uk-slider-item="previous"></a>
             <a class="uk-position-center-right uk-position-small uk-hidden-hover" href uk-slidenav-next uk-slider-item="next"></a>
         </div>
+
         <!-- BAGIAN NEW PRODUCT -->
         <section id="newProducts" class="uk-section">
             <div class="uk-container">
@@ -311,6 +316,7 @@
             </div>
         </section>
 
+        <!-- Menampilkan kategori yang bisa dipilih oleh user. Jika ditekan, akan beralih ke halaman shop dengan filter kategori yang dipilih -->
         <section id="shopByCategory" class="uk-section">
             <div class="uk-container">
                 <h1 class="uk-text-left uk-margin-small-top">Shop By Category</h1>
@@ -353,6 +359,8 @@
                 </div>
             </div>
         </section>
+
+        <!-- BAGIAN FREQUENTLY ASKED QUESTION -->
         <section id="frequentlyAskedQuestions" class="uk-section">
             <div class="uk-container">
                 <h1 class="uk-text-center uk-margin-large-top">Frequently Asked Questions</h1>
@@ -397,8 +405,9 @@
                 </ul>
 
             </div>
-        </section>     
+        </section> 
 
+        <!-- FOOTER -->
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">

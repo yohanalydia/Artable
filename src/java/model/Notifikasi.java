@@ -11,7 +11,8 @@ public class Notifikasi extends Model<Notifikasi> implements Updateable{
     private String pesan;
     private LocalDateTime waktu;
     private String status; // read / unread
-
+    
+    // Convert ResultSet jadi object Notifikasi
     @Override
     Notifikasi toModel(ResultSet rs) {
         try {
@@ -27,11 +28,13 @@ public class Notifikasi extends Model<Notifikasi> implements Updateable{
         return null;
     }
 
+    // Constructor default, set nama tabel dan primary key
     public Notifikasi() {
         this.table = "notifikasi";
         this.primaryKey = "idNotifikasi";
     }
-
+    
+    // Constructor untuk insert baru (tanpa idNotifikasi)
     public Notifikasi(int idUser, String judul, String pesan, LocalDateTime waktu, String status) {
         this();
         this.idUser = idUser;
@@ -41,6 +44,7 @@ public class Notifikasi extends Model<Notifikasi> implements Updateable{
         this.status = status;
     }
 
+    // Constructor lengkap dengan idNotifikasi (untuk read/update)
     public Notifikasi(int idNotifikasi, int idUser, String judul, String pesan, LocalDateTime waktu, String status) {
         this();
         this.idNotifikasi = idNotifikasi;
@@ -50,7 +54,8 @@ public class Notifikasi extends Model<Notifikasi> implements Updateable{
         this.waktu = waktu;
         this.status = status;
     }
-
+    
+    // SETTER DAN GETTER
     public int getId() {
         return idNotifikasi;
     }
@@ -107,7 +112,8 @@ public class Notifikasi extends Model<Notifikasi> implements Updateable{
     public void setJudul(String judul) {
         this.judul = judul;
     }
-
+    
+    // Mengembalikan banyaknya notifikasi yang belum dibaca
     public int getCountUnread(int idUser) {
         this.where("idUser = " + idUser + " AND status = 'unread'");
         return this.get().size();

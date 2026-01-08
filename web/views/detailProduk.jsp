@@ -106,6 +106,7 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
                         <%
                             User userSession = (User) session.getAttribute("user");
@@ -140,11 +141,12 @@
                         <a href="Home" class="text-decoration-none text-danger fw-bold">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -184,15 +186,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -210,6 +214,8 @@
                 return;
             }
         %>
+
+        <!-- Menampilkan detail produk yang telah dikirim servlet -->
         <div class="container my-5">
             <div class="product-detail-card p-4 shadow-sm">
                 <div class="row g-5 align-items-center">
@@ -222,14 +228,14 @@
 
                     <div class="col-md-6">
                         <% Seniman pembuat = new Seniman().find("idSeniman", String.valueOf(p.getIdSeniman()));
-                           String idSekolah = String.valueOf(pembuat.getIdUser());
-                           User sekolah = new User().find("idUser", idSekolah);
+                            String idSekolah = String.valueOf(pembuat.getIdUser());
+                            User sekolah = new User().find("idUser", idSekolah);
                         %>
                         <a href="SenimanServlet?menu=view&id=<%= pembuat.getIdSeniman()%>" class="badge rounded-pill px-3 py-2" style="background-color: #d2c9ff; color: #6f42c1;">
                             <i class="bi bi-person-circle me-1"></i> <%= pembuat.getNama()%>
                         </a>
-                        <a href="SenimanServlet?menu=detailSekolah&id=<%= idSekolah %>" class="badge rounded-pill px-3 py-2" style="background-color: #d2c9ff; color: #6f42c1;">
-                            <i class="bi bi bi-house-heart me-1"></i> <%= sekolah.getNama() %>
+                        <a href="SenimanServlet?menu=detailSekolah&id=<%= idSekolah%>" class="badge rounded-pill px-3 py-2" style="background-color: #d2c9ff; color: #6f42c1;">
+                            <i class="bi bi bi-house-heart me-1"></i> <%= sekolah.getNama()%>
                         </a>
                         <br><br>
                         <h2 class="fw-bold mb-1">"<%= p.getNama()%>"</h2>
@@ -248,6 +254,7 @@
                         <%
                             if (userSession == null || !"SEKOLAH".equals(userSession.getRole())) {
                         %>
+                        <!-- Form untuk menambahkan produk ke keranjang -->
                         <form action="CartServlet" method="POST" class="d-flex align-items-center gap-3 mb-4">
                             <input type="hidden" name="id" value="<%= p.getIdProduk()%>">
 
@@ -260,7 +267,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-outline-success rounded-pill px-4">
-                                <i class="bi bi-bag-plus me-2"></i>Add to cart
+                                <i class="bi bi-bag-plus me-2"></i>Add to cart 
                             </button>
                         </form>
                         <% }%>
@@ -284,6 +291,8 @@
                                                         <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button">Reviews</button>
                                                     </li>-->
                         </ul>
+
+                        <!-- Menampilkan tombol edit ataupun hapus deskripsi hanya jika role usernya adalah sekolah -->
                         <%
                             if (userSession != null
                                     && "SEKOLAH".equals(userSession.getRole())
@@ -305,6 +314,7 @@
                         <% }%>
                     </div>
 
+                    <!-- Menampilkan deskripsi produk -->
                     <div class="tab-content" id="productTabContent">
                         <div class="tab-pane fade show active" id="description" role="tabpanel">
 
@@ -398,18 +408,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-                                            // Fungsi untuk Toggle Form Edit Deskripsi (Bisa diletakkan di luar DOMContentLoaded)
+                                            // Fungsi toggle form edit deskripsi produk
                                             function toggleEditDesc() {
                                                 const textWrapper = document.getElementById('desc-text-wrapper');
                                                 const formWrapper = document.getElementById('desc-form-wrapper');
                                                 const btnEdit = document.getElementById('btn-edit-desc');
 
                                                 if (formWrapper.style.display === 'none') {
+                                                    // Tampilkan form, sembunyikan teks & tombol edit
                                                     formWrapper.style.display = 'block';
                                                     textWrapper.style.display = 'none';
                                                     if (btnEdit)
                                                         btnEdit.style.display = 'none';
                                                 } else {
+                                                    // Sembunyikan form, tampilkan teks & tombol edit
                                                     formWrapper.style.display = 'none';
                                                     textWrapper.style.display = 'block';
                                                     if (btnEdit)
@@ -418,15 +430,16 @@
                                             }
 
                                             document.addEventListener('DOMContentLoaded', function () {
-                                                // --- LOGIKA QUANTITY (CART) ---
+                                                // --- LOGIKA QUANTITY PRODUK DI CART ---
                                                 const btnMinus = document.getElementById('btn-minus');
                                                 const btnPlus = document.getElementById('btn-plus');
                                                 const inputQty = document.getElementById('input-qty');
 
-                                                // Pastikan elemen ada (karena Sekolah tidak melihat tombol ini)
+                                                // Pastikan elemen ada (tidak semua user/role melihat tombol ini)
                                                 if (btnMinus && btnPlus && inputQty) {
-                                                    const maxStock = <%= p.getStok()%>;
+                                                    const maxStock = <%= p.getStok()%>; // Stok maksimum produk
 
+                                                    // Tambah quantity, maksimal sesuai stok
                                                     btnPlus.addEventListener('click', function () {
                                                         let currentVal = parseInt(inputQty.value);
                                                         if (currentVal < maxStock) {
@@ -436,6 +449,7 @@
                                                         }
                                                     });
 
+                                                    // Kurangi quantity, minimal 1
                                                     btnMinus.addEventListener('click', function () {
                                                         let currentVal = parseInt(inputQty.value);
                                                         if (currentVal > 1) {
@@ -443,6 +457,7 @@
                                                         }
                                                     });
 
+                                                    // Validasi input manual
                                                     inputQty.addEventListener('change', function () {
                                                         let val = parseInt(this.value);
                                                         if (isNaN(val) || val < 1)
@@ -455,5 +470,6 @@
                                                 }
                                             });
     </script>
+
 </body>
 </html>

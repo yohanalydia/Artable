@@ -90,6 +90,7 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
                         <%
                             User userSession = (User) session.getAttribute("user");
@@ -124,11 +125,12 @@
                         <a href="Home" class="text-decoration-none text-dark">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-danger fw-bold">Pesanan Saya</a>
@@ -168,15 +170,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -185,6 +189,7 @@
             </div>
         </div>
 
+        <!-- Menampilkan Riwayat Transaksi User -->
         <div class="container py-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="fw-bold m-0 text-purple">Riwayat Pesanan</h3>
@@ -195,6 +200,7 @@
 
             <div class="accordion" id="accordionTrx">
                 <%
+                    // Mengambil list transaksi yang telah dikirimkan servlet
                     ArrayList<Transaksi> list = (ArrayList<Transaksi>) request.getAttribute("listTransaksi");
                     if (list == null || list.isEmpty()) {
                 %>
@@ -202,7 +208,7 @@
                     <i class="bi bi-bag-x text-muted" style="font-size: 3rem;"></i>
                     <p class="mt-3 text-muted">Belum ada riwayat pesanan.</p>
                 </div>
-                <%
+                <%    
                 } else {
                     for (Transaksi t : list) {
                 %>
@@ -236,16 +242,17 @@
                                         }
                                     }
                                 }
-
+                                
                                 if (!details.isEmpty()) {
                                     int currentSekolahId = -1;
                                     double ongkir = 20000;
 
+                                    // Menampilkan total harga pembelian per transaksi per sekolah
                                     for (DetailTransaksi dt : details) {
                                         if (dt.getIdSekolah() != currentSekolahId) {
                                             currentSekolahId = dt.getIdSekolah();
                                             User sekolah = new User().find("idUser", String.valueOf(dt.getIdSekolah()));
-
+                                            
                                             double subtotalSklh = 0;
                                             for (DetailTransaksi hitung : details) {
                                                 if (hitung.getIdSekolah() == currentSekolahId) {
@@ -261,6 +268,7 @@
                                     </div>
                                     <div>
                                         <%
+                                            // Menyesuaikan warna tampilan status sesuai kondisi status saat ini
                                             String status = dt.getStatus();
                                             if ("Dibatalkan".equals(status)) { %>
                                         <span class="badge bg-danger rounded-pill px-3 py-2"><i class="bi bi-x-circle"></i> Dibatalkan</span>
@@ -274,6 +282,7 @@
                                         <span class="badge bg-success rounded-pill px-3 py-2"><i class="bi bi-check-all"></i> Selesai</span>
                                         <%  } else if (dt.getBuktiTransfer() == null || dt.getBuktiTransfer().isEmpty()) {%>
                                         <div class="d-flex gap-2">
+                                            <!-- FORM UNTUK MEMBATALKAN ORDERAN -->
                                             <form action="Transaksi?action=cancel_order" method="POST" onsubmit="return confirm('Batal?')">
                                                 <input type="hidden" name="idTrx" value="<%= t.getIdTransaksi()%>">
                                                 <input type="hidden" name="idSekolah" value="<%= dt.getIdSekolah()%>">
@@ -288,6 +297,7 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <!-- Menampilkan produk per sekolah per transaksi -->
                                     <% for (DetailTransaksi prod : details) {
                                             if (prod.getIdSekolah() == currentSekolahId) {
                                                 Produk p = new Produk().find("idProduk", String.valueOf(prod.getIdProduk()));
@@ -319,6 +329,7 @@
                                     </div>
                                 </div>
 
+                                <!-- Menampilkan detail tambahan sesuai dengan kondisi status transaksi -->
                                 <% if ("Dikirim".equals(dt.getStatus())) {%>
                                 <div class="mt-3 p-3 bg-primary-subtle rounded-3">
                                     <div class="d-flex justify-content-between align-items-center">
@@ -342,6 +353,7 @@
 
                             <div class="modal fade" id="modalBukti<%= t.getIdTransaksi()%>_<%= dt.getIdSekolah()%>" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered modal-sm">
+                                    <!-- FORM UNTUK UPLOAD BUKTI TRANSFER PADA USER PEMBELI -->
                                     <form action="Transaksi?action=upload_bukti" method="POST" enctype="multipart/form-data" class="modal-content shadow">
                                         <div class="modal-body p-4 text-center">
                                             <h6 class="fw-bold mb-3">Upload Bukti Transfer</h6>
@@ -357,7 +369,7 @@
                                         } // End if Grouping Sekolah
                                     } // End for DetailTransaksi
                                 } // End if details
-%>
+                                %>
                             <div class="mt-2 p-3 bg-light rounded-3 small border">
                                 <i class="bi bi-geo-alt-fill text-danger"></i> <strong>Alamat:</strong> <%= t.getAlamatPengiriman()%>
                             </div>
@@ -367,10 +379,11 @@
                 <%
                         } // End for Transaksi
                     } // End if list empty
-%>
+                    %>
             </div>
         </div>
 
+        <!-- FOOTER -->
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">

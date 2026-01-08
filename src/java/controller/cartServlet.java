@@ -123,10 +123,6 @@ public class cartServlet extends HttpServlet {
                     CartItem itemToDelete = new CartItem();
                     // Set nilai ID ke properti yang merupakan Primary Key
                     itemToDelete.setIdCartItem(Integer.parseInt(idItem));
-
-                    // DEBUG: Cek di console apakah ID-nya benar masuk
-                    System.out.println("Menghapus item ID: " + idItem);
-
                     itemToDelete.delete();
                 }
             } else if ("update".equals(action)) {
@@ -137,12 +133,10 @@ public class cartServlet extends HttpServlet {
                 if (itemModel != null) {
                     Produk p = new Produk().find("idProduk", String.valueOf(itemModel.getIdProduk()));
                     int currentQty = itemModel.getQuantity();
-                    System.out.println("MASUK KE UPDATE");
                     if ("add".equals(op)) {
                         if (currentQty < p.getStok()) {
                             itemModel.addQuantity();
                             itemModel.update();
-                            System.out.println("MASUK SINI, QUANTITYNYA JADI: " + itemModel.getQuantity());
                         } else {
                             session.setAttribute("cartError", "Maaf, stok '" + p.getNama() + "' hanya tersisa " + p.getStok() + " unit.");
                         }

@@ -50,7 +50,8 @@ public class DashboardServlet extends HttpServlet {
                 request.setAttribute("totalPesanan", antrean);
                 request.setAttribute("totalTerjual", laku);
                 request.setAttribute("categoryData", fine + "," + digital + "," + handmade);
-
+                
+                // Mengarahkan user ke dashboard.jsp
                 request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
             } catch (Exception e) {
                 response.getWriter().print("Error: " + e.getMessage());
@@ -83,7 +84,8 @@ public class DashboardServlet extends HttpServlet {
                 request.setAttribute("totalPesanan", antrean);
                 request.setAttribute("totalTerjual", laku);
                 request.setAttribute("categoryData", fine + "," + digital + "," + handmade);
-
+                
+                // Mengarahkan user ke dashboard.jsp
                 request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
             } catch (Exception e) {
                 response.getWriter().print("Error: " + e.getMessage());

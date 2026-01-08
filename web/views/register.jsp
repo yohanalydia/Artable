@@ -77,6 +77,7 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
                         <%
                             User userSession = (User) session.getAttribute("user");
@@ -111,11 +112,12 @@
                         <a href="Home" class="text-decoration-none text-dark">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -155,15 +157,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-danger fw-bold">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-danger fw-bold">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -172,6 +176,7 @@
             </div>
         </div>
 
+        <!-- Menampilkan Form Register -->
         <div class="container">
             <div class="card register-card p-4 p-md-5">
                 <div class="text-center mb-5">
@@ -253,6 +258,8 @@
                 </form>
             </div>
         </div>
+
+        <!-- FOOTER -->
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">
@@ -288,24 +295,29 @@
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            // Tambahkan event listener ketika pilihan role berubah
             document.querySelector('select[name="role"]').addEventListener('change', function () {
-                const rekeningSection = document.getElementById('rekeningSection');
-                const tipeInput = document.getElementById('tipeRekening');
-                const nomorInput = document.getElementById('nomorRekening');
+                const rekeningSection = document.getElementById('rekeningSection'); // Section input rekening
+                const tipeInput = document.getElementById('tipeRekening');           // Input tipe rekening
+                const nomorInput = document.getElementById('nomorRekening');         // Input nomor rekening
 
                 if (this.value === 'SEKOLAH') {
+                    // Jika role SEKOLAH, tampilkan section rekening dan buat required
                     rekeningSection.style.display = 'block';
                     tipeInput.setAttribute('required', 'required');
                     nomorInput.setAttribute('required', 'required');
                 } else {
+                    // Jika bukan SEKOLAH, sembunyikan section rekening dan hapus required
                     rekeningSection.style.display = 'none';
                     tipeInput.removeAttribute('required');
                     nomorInput.removeAttribute('required');
-                    // Kosongkan value jika pindah ke pembeli agar tidak sengaja terkirim
+
+                    // Kosongkan value agar tidak terkirim secara tidak sengaja
                     tipeInput.value = '';
                     nomorInput.value = '';
                 }
             });
         </script>
+
     </body>
 </html>

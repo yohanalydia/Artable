@@ -108,8 +108,9 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
-                        <%
+                        <%                            
                             int countNotif = 0;
                             if (userSession != null) {
                                 countNotif = new Notifikasi().getCountUnread(userSession.getIdUser());
@@ -141,11 +142,12 @@
                         <a href="Home" class="text-decoration-none text-dark">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -185,15 +187,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -297,7 +301,7 @@
                             <i class="bi bi-box-seam display-1 text-muted"></i>
                             <p class="text-muted mt-3">Belum ada produk yang diunggah.</p>
                         </div>
-                        <%
+                        <%    
                         } else {
                             for (Produk p : myProds) {
                         %>
@@ -313,7 +317,7 @@
                                     <p class="text-purple fw-bold mb-3">Rp<%= String.format("%,.0f", p.getHarga())%></p>
 
                                     <div class="d-grid gap-2">
-                                        <a href="Produk?menu=view&id=<%= p.getIdProduk() %>" class="btn btn-sm btn-outline-secondary rounded-pill">
+                                        <a href="Produk?menu=view&id=<%= p.getIdProduk()%>" class="btn btn-sm btn-outline-secondary rounded-pill">
                                             <i class='bi bi-eye'></i> View
                                         </a>
                                         <a href="Produk?menu=edit&id=<%= p.getIdProduk()%>" class="btn btn-sm btn-outline-secondary rounded-pill">
@@ -340,7 +344,8 @@
 
             </div>
         </div>
-
+                    
+        <!-- FOOTER -->
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">

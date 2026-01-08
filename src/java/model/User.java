@@ -16,6 +16,7 @@ public class User extends Model<User> {
     protected String tipeRekening;
     protected String nomorRekening;
 
+    // Constructor default, set nama tabel dan primary key
     public User() {
         this.table = "user";
         this.primaryKey = "idUser";
@@ -52,6 +53,7 @@ public class User extends Model<User> {
         this.imageUrl = imageUrl;
     }
     
+    // SETTER DAN GETTER
     public void setNama(String nama) {
         this.nama = nama;
     }
@@ -141,6 +143,7 @@ public class User extends Model<User> {
     }
     
 
+    // Convert ResultSet jadi object User
     @Override
     public User toModel(ResultSet rs) {
         try {
@@ -160,7 +163,7 @@ public class User extends Model<User> {
             
             return u;
         } catch (Exception e) {
-            e.printStackTrace();
+            setMessage(e.getMessage());
             return null;
         }
     }

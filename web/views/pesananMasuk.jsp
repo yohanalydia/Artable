@@ -84,6 +84,7 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
                         <%
                             User userSession = (User) session.getAttribute("user");
@@ -118,6 +119,7 @@
                         <a href="Home" class="text-decoration-none text-dark">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-dark">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
@@ -162,15 +164,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -182,6 +186,7 @@
         <div class="container py-5">
             <h3 class="fw-bold mb-4 text-purple">Daftar Pesanan Masuk</h3>
 
+            <!-- Menampilkan daftar pesanan masuk ke akun sekolah -->
             <%
                 ArrayList<DetailTransaksi> list = (ArrayList<DetailTransaksi>) request.getAttribute("daftarPesanan");
                 if (list == null || list.isEmpty()) {
@@ -258,10 +263,12 @@
                         </tbody>
                     </table>
 
+
                     <div class="d-flex justify-content-between align-items-center border-top pt-3">
                         <div>
                             <span class="small text-muted">Status: </span>
                             <span class="badge rounded-pill 
+                                  <!-- Menampilkan warna sesuai status -->
                                   <%= "Menunggu Verifikasi".equals(dt.getStatus()) ? "bg-info"
                                           : "Diproses".equals(dt.getStatus()) ? "bg-purple"
                                           : "Dikirim".equals(dt.getStatus()) || "Selesai".equals(dt.getStatus()) ? "bg-success"
@@ -272,6 +279,7 @@
                         </div>
 
                         <div class="text-end">
+                            <!-- Menampilkan pilihan aksi sesuai dengan status transaksi saat ini -->
                             <% if ("Menunggu Verifikasi".equals(dt.getStatus())) {%>
                             <button class="btn btn-sm btn-purple px-4" data-bs-toggle="modal" data-bs-target="#modalCek<%= dt.getIdTransaksi()%>">
                                 <i class="bi bi-search"></i> Periksa Bukti
@@ -300,15 +308,19 @@
                         </div>
                     </div>
 
+                    <!-- Modal untuk menampilkan bukti transfer per transaksi -->
                     <div class="modal fade" id="modalCek<%= dt.getIdTransaksi()%>" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
+                                <!-- Header modal: judul dengan nomor transaksi -->
                                 <div class="modal-header">
                                     <h6 class="modal-title fw-bold">Bukti Transfer Nota #<%= dt.getIdTransaksi()%></h6>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
+                                <!-- Body modal: tampilkan gambar bukti transfer -->
                                 <div class="modal-body text-center">
                                     <img src="<%= dt.getBuktiTransfer()%>" class="img-fluid rounded border mb-3">
+                                    <!-- Form untuk verifikasi pembayaran -->
                                     <form action="Transaksi?action=verifikasi_pembayaran" method="POST">
                                         <input type="hidden" name="idTrx" value="<%= dt.getIdTransaksi()%>">
                                         <input type="hidden" name="idSekolah" value="<%= dt.getIdSekolah()%>">
@@ -319,18 +331,23 @@
                         </div>
                     </div>
 
+                    <!-- Modal untuk konfirmasi pengiriman per transaksi -->
                     <div class="modal fade" id="modalKirim<%= dt.getIdTransaksi()%>" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
+                                <!-- Header modal: judul dengan nomor transaksi -->
                                 <div class="modal-header">
                                     <h6 class="modal-title fw-bold">Konfirmasi Pengiriman #<%= dt.getIdTransaksi()%></h6>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
+                                <!-- Form untuk proses pengiriman -->
                                 <form action="Transaksi?action=proses_kirim" method="POST">
                                     <div class="modal-body">
+                                        <!-- Kirim ID transaksi & ID sekolah ke servlet -->
                                         <input type="hidden" name="idTrx" value="<%= dt.getIdTransaksi()%>">
                                         <input type="hidden" name="idSekolah" value="<%= dt.getIdSekolah()%>">
                                         <div class="mb-3">
+                                            <!-- Pilih jasa pengiriman -->
                                             <label class="form-label small fw-bold">Jasa Pengiriman</label>
                                             <select name="kurir" class="form-select" required>
                                                 <option value="JNE">JNE Express</option>
@@ -339,11 +356,13 @@
                                                 <option value="POS">Pos Indonesia</option>
                                             </select>
                                         </div>
+                                        <!-- Input nomor resi -->
                                         <div class="mb-3">
                                             <label class="form-label small fw-bold">Nomor Resi</label>
                                             <input type="text" name="noResi" class="form-control" placeholder="Masukkan nomor resi..." required>
                                         </div>
                                     </div>
+                                    <!-- Footer modal: tombol submit -->
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-purple w-100">Konfirmasi & Kirim</button>
                                     </div>
@@ -357,9 +376,10 @@
                         } // End If Grouping
                     } // End For Loop Utama
                 } // End Else
-%>
+            %>
         </div>
 
+        <!-- FOOTER -->
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">

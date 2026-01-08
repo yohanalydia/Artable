@@ -148,6 +148,7 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand fw-bold text-decoration-none" href="Home" style="color: #6f42c1;">Artable</a>
 
+                    <!-- Menampilkan jumlah notifikasi pada user sekaligus tombol notifikasi jika user telah login -->
                     <div class="d-flex gap-4 align-items-center">
                         <%
                             User userSession = (User) session.getAttribute("user");
@@ -182,11 +183,12 @@
                         <a href="Home" class="text-decoration-none text-dark">Home</a>
                         <a href="Produk?menu=shop" class="text-decoration-none text-danger fw-bold">Shop</a>
                         <a href="Home?menu=about" class="text-decoration-none text-dark">About Us</a>
+                        <!-- Menampilkan menu-menu sesuai dengan role user yang sedang login -->
                         <%
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -226,15 +228,17 @@
                     </div>
                     <div>
                         <%
+                            // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="${pageContext.request.contextPath}/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
+                            // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="${pageContext.request.contextPath}/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -242,7 +246,7 @@
                 </div>
             </div>
         </div>
-                    
+
         <!-- Header -->
         <header class="shop-header">
             <div class="container">
@@ -269,12 +273,12 @@
                         if (currentCat == null) {
                             currentCat = "";
                         }
-
+                        
                         String currentSort = request.getParameter("sort");
                         if (currentSort == null) {
                             currentSort = "";
                         }
-
+                        
                         String currentSearch = request.getParameter("search");
                         if (currentSearch == null) {
                             currentSearch = "";
@@ -290,10 +294,12 @@
                             <h6 class="fw-bold mb-3"><i class="bi bi-building me-2 text-primary"></i>School</h6>
                             <form action="Produk" method="GET">
                                 <input type="hidden" name="menu" value="shop">
+                                <!-- Mengecek kondisi filter saat ini untuk melakukan filtering -->
                                 <% if (!currentCat.isEmpty()) {%> <input type="hidden" name="category" value="<%= currentCat%>"> <% } %>
                                 <% if (!currentSort.isEmpty()) {%> <input type="hidden" name="sort" value="<%= currentSort%>"> <% } %>
                                 <% if (!currentSearch.isEmpty()) {%> <input type="hidden" name="search" value="<%= currentSearch%>"> <% }%>
 
+                                <!-- Menampilkan fitur search berdasarkan nama sekolah -->
                                 <div class="input-group">
                                     <input name="search-school" class="form-control border-end-0 bg-light" 
                                            placeholder="Search by school name..." 
@@ -307,6 +313,7 @@
                         </div>
                     </div>
 
+                    <!-- Menampilkan pilihan filter berdasarkan kategori -->
                     <div class="card border-0 shadow-sm rounded-4">
                         <div class="card-body p-4">
                             <h6 class="fw-bold mb-3"><i class="bi bi-grid me-2 text-primary"></i>Category</h6>
@@ -369,10 +376,10 @@
 
                     <div class="row g-4">
 
-                        <!-- Product -->
+                        <!-- Menampilkan daftar produk -->
                         <%
                             ArrayList<Produk> prods = (ArrayList<Produk>) request.getAttribute("list");
-
+                            
                             if (prods != null && !prods.isEmpty()) {
                                 for (Produk p : prods) {
                                     String url = p.getImageUrl();
@@ -417,7 +424,7 @@
             </div>
         </div>
 
-
+        <!-- FOOTER -->
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">

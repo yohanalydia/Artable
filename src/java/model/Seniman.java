@@ -12,11 +12,13 @@ public class Seniman extends Model<Seniman> {
     private String imageUrl;
     private int idUser;
 
+    // Constructor default, set nama tabel dan primary key
     public Seniman() {
-    this.table = "seniman";
-    this.primaryKey = "idSeniman"; 
-}
-    
+        this.table = "seniman";
+        this.primaryKey = "idSeniman";
+    }
+
+    // Constructor untuk insert baru (tanpa idSeniman)
     public Seniman(String nama, String tanggalLahir, String jenisDisabilitas, String jenisKelamin, String tentangSaya, String imageUrl, int idUser) {
         this();
         this.nama = nama;
@@ -28,6 +30,7 @@ public class Seniman extends Model<Seniman> {
         this.idUser = idUser;
     }
     
+    // Constructor lengkap dengan idSeniman (untuk read/update)
     public Seniman(int id, String nama, String tanggalLahir, String jenisDisabilitas, String jenisKelamin, String tentangSaya, String imageUrl, int idUser) {
         this();
         this.idSeniman = id;
@@ -40,6 +43,7 @@ public class Seniman extends Model<Seniman> {
         this.idUser = idUser;
     }
 
+    // SETTER DAN GETTER
     public void setId(int idSeniman) {
         this.idSeniman = idSeniman;
     }
@@ -112,10 +116,11 @@ public class Seniman extends Model<Seniman> {
         this.idUser = idUser;
     }
 
+    // Convert ResultSet jadi object Seniman
     @Override
     Seniman toModel(ResultSet rs){
         try {
-            // Karena di DB adalah DATE, rs.getString akan otomatis jadi YYYY-MM-DD
+             // Ambil data dari ResultSet dan buat object Seniman
             return new Seniman(
                 rs.getInt("idSeniman"), 
                 rs.getString("nama"), 
