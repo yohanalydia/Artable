@@ -7,9 +7,12 @@
         <title>Pesanan Masuk - Artable</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
         <style>
             body {
-                background: #f6f7fb;
+                background:#f6f7fb;
+                font-family: 'Plus Jakarta Sans', sans-serif;
             }
             .nota-box {
                 background: white;
@@ -119,7 +122,7 @@
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -133,7 +136,7 @@
                                 <i class="bi bi-shop me-1"></i> Menu Toko
                             </a>
                             <ul class="dropdown-menu shadow-sm border-0" aria-labelledby="dropdownMenuToko">
-                               <li>
+                                <li>
                                     <a class="dropdown-item py-2" href="Dashboard">
                                         <i class="bi bi-file-bar-graph me-3"></i> Dashboard
                                     </a>
@@ -354,7 +357,7 @@
                         } // End If Grouping
                     } // End For Loop Utama
                 } // End Else
-            %>
+%>
         </div>
 
         <footer class="py-5 bg-light border-top mt-0">

@@ -165,8 +165,6 @@ public class Produk extends Model<Produk> {
 
     public void setMaterial(String material) {
         this.material = material;
-    }
-    
-    
+    }  
 }
 

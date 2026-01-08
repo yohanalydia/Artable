@@ -18,12 +18,12 @@
                 --light-purple: #a951ed;
                 --bg-body: #f4f2f7;
             }
-            
+
             .topbar {
                 font-size:14px;
                 background:#eef1f8;
             }
-            
+
             body {
                 background:#f6f7fb;
                 font-family: 'Plus Jakarta Sans', sans-serif;
@@ -136,7 +136,7 @@
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-danger fw-bold">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -197,9 +197,9 @@
             <div class="mb-4">
                 <h2 class="fw-bold text-dark">
                     <%
-                        if ("SEKOLAH".equals(userSession.getRole())){
+                        if ("SEKOLAH".equals(userSession.getRole())) {
                             out.print("Laporan Sekolah");
-                        }else if ("ADMIN".equals(userSession.getRole())){
+                        } else if ("ADMIN".equals(userSession.getRole())) {
                             out.print("Laporan Artable");
                         }
                     %>
@@ -269,7 +269,7 @@
                 </div>
             </div>
         </div>
-                                
+
         <footer class="py-5 bg-light border-top mt-0">
             <div class="container">
                 <div class="row g-4 text-center text-md-start">
@@ -305,6 +305,7 @@
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             const ctx = document.getElementById('categoryPieChart').getContext('2d');
             new Chart(ctx, {

@@ -137,11 +137,12 @@ public class cartServlet extends HttpServlet {
                 if (itemModel != null) {
                     Produk p = new Produk().find("idProduk", String.valueOf(itemModel.getIdProduk()));
                     int currentQty = itemModel.getQuantity();
-
+                    System.out.println("MASUK KE UPDATE");
                     if ("add".equals(op)) {
                         if (currentQty < p.getStok()) {
                             itemModel.addQuantity();
                             itemModel.update();
+                            System.out.println("MASUK SINI, QUANTITYNYA JADI: " + itemModel.getQuantity());
                         } else {
                             session.setAttribute("cartError", "Maaf, stok '" + p.getNama() + "' hanya tersisa " + p.getStok() + " unit.");
                         }

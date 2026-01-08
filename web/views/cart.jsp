@@ -109,7 +109,7 @@
                             if (userSession != null && "ADMIN".equals(userSession.getRole())) { %>
                         <a href="Dashboard" class="bi bi-file-bar-graph text-decoration-none text-dark">Dashboard</a>
                         <% } %>
-                        
+
                         <%
                             if (userSession != null && "PEMBELI".equals(userSession.getRole())) { %>
                         <a href="Transaksi" class="text-decoration-none text-dark">Pesanan Saya</a>
@@ -215,18 +215,26 @@
                                                 <h6 class="text-black mb-0"><%= p.getNama()%></h6>
                                             </div>
                                             <div class="col-md-3 d-flex justify-content-center align-items-center">
-                                                <a href="CartServlet?action=update&idItem=<%= ci.getIdCartItem()%>&op=min" 
-                                                   class="btn btn-link px-2 text-dark">
-                                                    <i class="bi bi-dash-circle"></i>
-                                                </a>
+                                                <form action="CartServlet" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="action" value="update">
+                                                    <input type="hidden" name="idItem" value="<%= ci.getIdCartItem()%>">
+                                                    <input type="hidden" name="op" value="min">
+                                                    <button type="submit" class="btn btn-link px-2 text-dark border-0 bg-transparent">
+                                                        <i class="bi bi-dash-circle"></i>
+                                                    </button>
+                                                </form>
 
                                                 <input type="number" readonly class="form-control form-control-sm text-center mx-2" 
                                                        value="<%= ci.getQuantity()%>" style="width: 50px;" />
 
-                                                <a href="CartServlet?action=update&idItem=<%= ci.getIdCartItem()%>&op=add" 
-                                                   class="btn btn-link px-2 text-dark">
-                                                    <i class="bi bi-plus-circle"></i>
-                                                </a>
+                                                <form action="CartServlet" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="action" value="update">
+                                                    <input type="hidden" name="idItem" value="<%= ci.getIdCartItem()%>">
+                                                    <input type="hidden" name="op" value="add">
+                                                    <button type="submit" class="btn btn-link px-2 text-dark border-0 bg-transparent">
+                                                        <i class="bi bi-plus-circle"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                             <div class="col-md-3">
                                                 <h6 class="mb-0">Rp<%= String.format("%,.0f", p.getHarga() * ci.getQuantity())%></h6>
@@ -347,7 +355,7 @@
                 <p class="text-center text-secondary small">&copy; 2025 Artable. All rights reserved.</p>
             </div>
         </footer>
-
+                                        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

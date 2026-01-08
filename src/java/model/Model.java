@@ -111,8 +111,6 @@ public abstract class Model<E> {
             String query = "UPDATE " + table + " SET " + values.substring(0, values.length() - 2)
                     + " WHERE " + primaryKey + " = '" + pkValue + "'";
 
-            // DEBUG: Lihat query yang dihasilkan di Output NetBeans
-//            System.out.println("DEBUG UPDATE QUERY: " + query);
             int result = stmt.executeUpdate(query);
             System.out.println("UPDATE INFO: " + result + " rows affected.");
 
