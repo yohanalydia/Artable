@@ -22,8 +22,8 @@ public abstract class Model<E> {
 
     private void connect() {
         String db_name = "artable";
-        String username = "root";
-        String password = "";
+        String username = "root"; // Sesuaikan dengan database di device masing-masing
+        String password = ""; // Sesuaikan dengan database di device masing-masing
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db_name, username, password);
