@@ -189,14 +189,14 @@
                             // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="/Auth?type=register" class="text-decoration-none text-dark">Register</a>
+                        <a href="Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="Auth?type=register" class="text-decoration-none text-dark">Register</a>
                         <%
                             // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>

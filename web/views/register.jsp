@@ -160,14 +160,14 @@
                             // Menampilkan tombol untuk login dan register jika user belum login
                             if (userSession == null) {
                         %>
-                        <a href="/Auth" class="text-decoration-none text-dark">Login</a> /
-                        <a href="/Auth?type=register" class="text-decoration-none text-danger fw-bold">Register</a>
+                        <a href="Auth" class="text-decoration-none text-dark">Login</a> /
+                        <a href="Auth?type=register" class="text-decoration-none text-danger fw-bold">Register</a>
                         <%
                             // Menampilkan nama user yang sedang login beserta tombol logout
                         } else {
                         %>
                         <span class="fw-bold me-2">Hi, <a href="Auth?type=profil" class="text-decoration-none" style="color: #6f42c1;"> <%= userSession.getNama()%> </a> </span>
-                        <a href="/Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
+                        <a href="Auth?logout=true" class="text-danger text-decoration-none small">Logout</a>
                         <%
                             }
                         %>
@@ -190,7 +190,7 @@
                 </div>
                 <% }%>
 
-                <form action="${pageContext.request.contextPath}/Auth" method="POST">
+                <form action="Auth" method="POST">
                     <input type="hidden" name="action" value="register">
 
                     <div class="mb-3">
@@ -253,7 +253,7 @@
                     <button type="submit" class="btn btn-purple w-100 py-2 shadow-sm">Daftar Sekarang</button>
 
                     <div class="text-center mt-4 small text-muted">
-                        Sudah punya akun? <a href="${pageContext.request.contextPath}/Auth" class="text-decoration-none fw-bold">Masuk di sini</a>
+                        Sudah punya akun? <a href="Auth" class="text-decoration-none fw-bold">Masuk di sini</a>
                     </div>
                 </form>
             </div>
