@@ -25,7 +25,7 @@ public class cartServlet extends HttpServlet {
 
         // Proteksi: Harus login sebagai Pembeli
         if (user == null) {
-            response.sendRedirect("views/login.jsp");
+            response.sendRedirect("Auth");
             return;
         }
 
@@ -68,7 +68,7 @@ public class cartServlet extends HttpServlet {
         Pembeli user = (Pembeli) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect("views/login.jsp");
+            response.sendRedirect("Auth");
             return;
         }
 

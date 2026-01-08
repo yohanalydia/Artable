@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import model.Produk;
 import model.Seniman;
 import model.User;
 
@@ -188,11 +189,11 @@ public class senimanServlet extends HttpServlet {
                 String id = request.getParameter("id");
 
                 // 1. Ambil data seniman
-                model.Seniman s = new model.Seniman().find("idSeniman", id);
+                Seniman s = new Seniman().find("idSeniman", id);
 
                 if (s != null) {
                     // 2. Ambil data sekolah (User) berdasarkan idUser yang ada di profil seniman
-                    model.User sekolah = new model.User().find("idUser", String.valueOf(s.getIdUser()));
+                    User sekolah = new User().find("idUser", String.valueOf(s.getIdUser()));
 
                     request.setAttribute("s", s);
 
@@ -202,6 +203,12 @@ public class senimanServlet extends HttpServlet {
                     } else {
                         request.setAttribute("namaSekolah", "Sekolah Tidak Terdaftar");
                     }
+                    
+                    // 4. Ambil daftar karya milik seniman ini
+                    Produk p = new Produk();
+                    p.where("idSeniman = " + String.valueOf(id));
+                    ArrayList<Produk> listKarya = p.get();
+                    request.setAttribute("listKarya", listKarya);
                 }
 
                 // Forward ke halaman yang berisi detail tadi
