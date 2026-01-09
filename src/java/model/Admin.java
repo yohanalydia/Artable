@@ -1,6 +1,10 @@
 package model;
 
 public class Admin extends User{
+    // Constructor default
+    public Admin(){
+        super();
+    }
     
     // Constructor untuk admin yang akan langsung memasukan nilai default "ADMIN" sebagai role
     public Admin(String nama, String username, String email, String password, String nomorTelepon) {

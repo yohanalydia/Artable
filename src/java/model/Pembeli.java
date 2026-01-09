@@ -1,6 +1,10 @@
 package model;
 
 public class Pembeli extends User{
+    // Constructor default
+    public Pembeli(){
+        super();
+    }
     
     // Constructor untuk input user baru (id belum terbentuk)
     public Pembeli(String nama, String username, String email, String password, String alamat, String nomorTelepon, String imageUrl) {

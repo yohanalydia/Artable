@@ -148,7 +148,7 @@ public abstract class Model<E> {
     }
     
     // Konversi satu baris ResultSet menjadi ArrayList<Object>
-    ArrayList<Object> toRow(ResultSet rs) {
+    public ArrayList<Object> toRow(ResultSet rs) {
         ArrayList<Object> res = new ArrayList<>();
         int i = 1;
         try {
