@@ -136,7 +136,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item py-2" href="Produk?menu=myseniman">
+                                    <a class="dropdown-item py-2" href="SenimanServlet?menu=myseniman">
                                         <i class="bi bi-people me-3"></i> Seniman Saya
                                     </a>
                                 </li>
@@ -247,6 +247,7 @@
                                                 <h6 class="mb-0">Rp<%= String.format("%,.0f", p.getHarga() * ci.getQuantity())%></h6>
                                             </div>
                                             <div class="col-md-1 text-end">
+                                                <!-- HAPUS CART ITEM DARI CART -->
                                                 <form action="CartServlet" method="POST" onsubmit="return confirm('Remove this item?')">
                                                     <input type="hidden" name="action" value="remove">
                                                     <input type="hidden" name="idItem" value="<%= ci.getIdCartItem()%>">

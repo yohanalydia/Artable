@@ -83,11 +83,11 @@ public class senimanServlet extends HttpServlet {
 
             baru.insert();
 
-            response.sendRedirect("Produk?menu=myseniman&msg=Seniman Berhasil Didaftarkan");
+            response.sendRedirect("SenimanServlet?menu=myseniman&msg=Seniman Berhasil Didaftarkan");
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("Produk?menu=myseniman&error=Gagal: " + e.getMessage());
+            response.sendRedirect("SenimanServlet?menu=myseniman&error=Gagal: " + e.getMessage());
         }
     }
 
@@ -99,14 +99,14 @@ public class senimanServlet extends HttpServlet {
                 s.setId(Integer.parseInt(id));
                 s.delete();
 
-                response.sendRedirect("Produk?menu=myseniman&msg=Seniman Berhasil Dihapus");
+                response.sendRedirect("SenimanServlet?menu=myseniman&msg=Seniman Berhasil Dihapus");
             } catch (Exception e) {
                 // Log error ke console untuk debugging
                 System.err.println("Gagal menghapus seniman: " + e.getMessage());
                 e.printStackTrace();
 
                 // Redirect dengan pesan error (biasanya karena relasi database/FK)
-                response.sendRedirect("Produk?menu=myseniman&error=Gagal menghapus seniman. Pastikan seniman tidak memiliki karya yang terdaftar.");
+                response.sendRedirect("SenimanServlet?menu=myseniman&error=Gagal menghapus seniman. Pastikan seniman tidak memiliki karya yang terdaftar.");
             }
         }
     }
@@ -157,11 +157,11 @@ public class senimanServlet extends HttpServlet {
             s.setImageUrl(imageUrl);
 
             s.update();
-            response.sendRedirect("Produk?menu=myseniman&msg=Profil Seniman Berhasil Diperbarui");
+            response.sendRedirect("SenimanServlet?menu=myseniman&msg=Profil Seniman Berhasil Diperbarui");
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("Produk?menu=myseniman&error=Gagal Update: " + e.getMessage());
+            response.sendRedirect("SenimanServlet?menu=myseniman&error=Gagal Update: " + e.getMessage());
         }
     }
 
@@ -183,7 +183,7 @@ public class senimanServlet extends HttpServlet {
                     // Forward ke file editSeniman.jsp (Pastikan letak filenya benar)
                     request.getRequestDispatcher("views/editSeniman.jsp").forward(request, response);
                 } else {
-                    response.sendRedirect("Produk?menu=myseniman");
+                    response.sendRedirect("SenimanServlet?menu=myseniman");
                 }
             } else if ("view".equals(menu)) {
                 String id = request.getParameter("id");
@@ -203,7 +203,7 @@ public class senimanServlet extends HttpServlet {
                     } else {
                         request.setAttribute("namaSekolah", "Sekolah Tidak Terdaftar");
                     }
-                    
+
                     // 4. Ambil daftar karya milik seniman ini
                     Produk p = new Produk();
                     p.where("idSeniman = " + String.valueOf(id));
@@ -241,6 +241,33 @@ public class senimanServlet extends HttpServlet {
 
                 // 5. Lempar (Forward) ke halaman detailSekolah.jsp
                 request.getRequestDispatcher("views/detailSekolah.jsp").forward(request, response);
+            } else if ("myseniman".equals(menu)) {
+                try {
+                    User user = (User) request.getSession().getAttribute("user");
+
+                    // Proteksi jika session user tiba-tiba hilang
+                    if (user == null) {
+                        response.sendRedirect("Auth");
+                        return;
+                    }
+
+                    Seniman sModel = new Seniman();
+
+                    // Filter berdasarkan idUser (Sekolah yang login)
+                    sModel.where("idUser = " + user.getIdUser());
+                    ArrayList<Seniman> list = sModel.get();
+
+                    request.setAttribute("myArtistList", list);
+                    request.getRequestDispatcher("views/senimanSaya.jsp").forward(request, response);
+
+                } catch (Exception e) {
+                    // Log error di console server
+                    System.err.println("Error saat memuat daftar seniman: " + e.getMessage());
+                    e.printStackTrace();
+
+                    // Redirect dengan pesan error agar user tidak bingung
+                    response.sendRedirect("Home?error=failed_to_load_artists");
+                }
             }
 
         } catch (Exception e) {
@@ -249,7 +276,7 @@ public class senimanServlet extends HttpServlet {
             e.printStackTrace();
 
             // Redirect ke halaman sebelumnya atau home jika terjadi kegagalan database
-            response.sendRedirect("Produk?menu=myseniman&error=Terjadi kesalahan sistem saat memuat data.");
+            response.sendRedirect("SenimanServlet?menu=myseniman&error=Terjadi kesalahan sistem saat memuat data.");
         }
     }
 }

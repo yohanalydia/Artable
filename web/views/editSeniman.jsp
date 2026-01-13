@@ -61,7 +61,7 @@
             Seniman s = (Seniman) request.getAttribute("s");
             
             if (s == null) {
-                response.sendRedirect("Produk?menu=myseniman");
+                response.sendRedirect("SenimanServlet?menu=myseniman");
                 return;
             }
         %>
@@ -155,7 +155,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item py-2" href="Produk?menu=myseniman">
+                                    <a class="dropdown-item py-2" href="SenimanServlet?menu=myseniman">
                                         <i class="bi bi-people me-3"></i> Seniman Saya
                                     </a>
                                 </li>
@@ -196,7 +196,7 @@
                     <div class="card card-custom p-4">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h4 class="section-title m-0">Edit Profil Seniman</h4>
-                            <a href="Produk?menu=myseniman" class="btn-close"></a>
+                            <a href="SenimanServlet?menu=myseniman" class="btn-close"></a>
                         </div>
 
                         <form action="SenimanServlet?action=update" method="POST" enctype="multipart/form-data">
@@ -239,7 +239,7 @@
                             </div>
 
                             <div class="d-flex gap-2">
-                                <a href="Produk?menu=myseniman" class="btn btn-light w-100 py-2">Batal</a>
+                                <a href="SenimanServlet?menu=myseniman" class="btn btn-light w-100 py-2">Batal</a>
                                 <button type="submit" class="btn btn-purple w-100 py-2 shadow-sm">
                                     <i class="bi bi-check-circle me-2"></i>Simpan Perubahan
                                 </button>

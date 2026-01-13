@@ -98,7 +98,7 @@ public class produkServlet extends HttpServlet {
                     }
                 }
 
-                // Filter Pencarian Nama
+                // Filter Pencarian Nama Produk
                 if (search != null && !search.isEmpty()) {
                     String searchCondition = "nama LIKE '%" + search + "%'";
                     if (category != null && !category.isEmpty()) {
@@ -149,34 +149,7 @@ public class produkServlet extends HttpServlet {
                 // Redirect ke katalog dengan pesan error
                 response.sendRedirect("Produk?menu=shop&error=system_error");
             }
-        } else if ("myseniman".equals(menu)) {
-            try {
-                User user = (User) request.getSession().getAttribute("user");
-
-                // Proteksi jika session user tiba-tiba hilang
-                if (user == null) {
-                    response.sendRedirect("Auth");
-                    return;
-                }
-
-                Seniman sModel = new Seniman();
-
-                // Filter berdasarkan idUser (Sekolah yang login)
-                sModel.where("idUser = " + user.getIdUser());
-                ArrayList<Seniman> list = sModel.get();
-
-                request.setAttribute("myArtistList", list);
-                request.getRequestDispatcher("views/senimanSaya.jsp").forward(request, response);
-
-            } catch (Exception e) {
-                // Log error di console server
-                System.err.println("Error saat memuat daftar seniman: " + e.getMessage());
-                e.printStackTrace();
-
-                // Redirect dengan pesan error agar user tidak bingung
-                response.sendRedirect("Home?error=failed_to_load_artists");
-            }
-        } else if ("edit".equals(menu)) {
+        }  else if ("edit".equals(menu)) {
             try {
                 // 1. Ambil ID produk dari URL
                 String id = request.getParameter("id");
@@ -246,7 +219,7 @@ public class produkServlet extends HttpServlet {
                 String material = request.getParameter("material");
                 int idSeniman = Integer.parseInt(request.getParameter("idSeniman")); // TANGKAP ID SENIMAN
 
-                // 2. Proses Gambar (Tetap sama seperti sebelumnya)
+                // 2. Proses Gambar
                 Part filePart = request.getPart("foto");
                 String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
                 String uploadPath = getServletContext().getRealPath("/") + "assets/fotoProduk";

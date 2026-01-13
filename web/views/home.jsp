@@ -207,7 +207,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item py-2" href="Produk?menu=myseniman">
+                                    <a class="dropdown-item py-2" href="SenimanServlet?menu=myseniman">
                                         <i class="bi bi-people me-3"></i> Seniman Saya
                                     </a>
                                 </li>
